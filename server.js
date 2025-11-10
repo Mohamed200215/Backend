@@ -44,6 +44,24 @@ async function main() {
       }
     });
 
+     // PUT - update lesson
+    app.put("/lessons/:id", async (req, res) => {
+      try {
+        const id = req.params.id;
+        const updateData = req.body; // e.g. { spaces: 3 }
+        const result = await lessonsCollection.updateOne(
+          { _id: new ObjectId(id) },
+          { $set: updateData }
+        );
+        res.json({ message: "Lesson updated successfully", result });
+      } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: "Failed to update lesson" });
+      }
+    });
+
+
+
     // ---------- SERVER ----------
     app.listen(3000, () => console.log("✅ Server running on port 3000"));
   } catch (err) {
