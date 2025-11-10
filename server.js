@@ -71,8 +71,13 @@ async function main() {
         res.status(500).json({ error: "Failed to delete lesson" });
       }
     });
+    
 
-
+//  GET all orders 
+    app.get("/orders", async (req, res) => {
+      const orders = await ordersCollection.find({}).toArray();
+      res.json(orders);
+    });
 
 
     // ---------- SERVER ----------
