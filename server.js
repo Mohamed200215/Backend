@@ -1,30 +1,38 @@
 const express = require("express");
 const cors = require("cors");
-const { MongoClient } = require("mongodb");
+const { MongoClient, ObjectId } = require("mongodb");
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 
-
+// MongoDB connection string 
 const url = "mongodb+srv://maxamedmosseabdi:Maxamed12%3F%3F@lessons.1ojmdjj.mongodb.net/?appName=Lessons";
-const client = new MongoClient(url);
+const client = new MongoClient(url, {
+  tls: true,
+  tlsAllowInvalidCertificates: true
+});
 
 async function main() {
   try {
-    console.log("⏳ Connecting to MongoDB...");
+    console.log(" Connecting to MongoDB...");
     await client.connect();
-    console.log("✅ Connected to MongoDB Atlas");
+    console.log(" Connected to MongoDB Atlas");
 
     const db = client.db("AfterSchool");
     const lessonsCollection = db.collection("lessons");
+    const ordersCollection = db.collection("orders");
 
+    // ---------- BASIC ROUTES ----------
     app.get("/", (req, res) => res.send("Backend is running 🚀"));
+
+    //GET all lesson
     app.get("/lessons", async (req, res) => {
       const lessons = await lessonsCollection.find({}).toArray();
       res.json(lessons);
     });
 
+    // ---------- SERVER ----------
     app.listen(3000, () => console.log("✅ Server running on port 3000"));
   } catch (err) {
     console.error("❌ Error:", err);
