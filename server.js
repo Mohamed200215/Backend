@@ -32,6 +32,18 @@ async function main() {
       res.json(lessons);
     });
 
+        // POST new order
+    app.post("/order", async (req, res) => {
+      try {
+        const order = req.body;
+        const result = await ordersCollection.insertOne(order);
+        res.status(201).json({ message: "Order placed successfully!", result });
+      } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: "Failed to place order" });
+      }
+    });
+
     // ---------- SERVER ----------
     app.listen(3000, () => console.log("✅ Server running on port 3000"));
   } catch (err) {
