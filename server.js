@@ -60,6 +60,19 @@ async function main() {
       }
     });
 
+     // DELETE 
+    app.delete("/lessons/:id", async (req, res) => {
+      try {
+        const id = req.params.id;
+        const result = await lessonsCollection.deleteOne({ _id: new ObjectId(id) });
+        res.json({ message: "Lesson deleted successfully", result });
+      } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: "Failed to delete lesson" });
+      }
+    });
+
+
 
 
     // ---------- SERVER ----------
