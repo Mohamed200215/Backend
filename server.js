@@ -2,7 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const { MongoClient, ObjectId } = require("mongodb");
 
-// ✅ Import the orders route
+//Import the orders route
 const createOrdersRouter = require("./routes/orders");
 
 const app = express();
@@ -21,10 +21,10 @@ async function main() {
     await client.connect();
     console.log("✅ Connected to MongoDB Atlas");
 
-    const db = client.db("AfterSchool");
+    const db = client.db("Afterschool");
     const lessonsCollection = db.collection("lessons");
 
-    // ✅ Use the orders router
+    //the orders router
     app.use("/orders", createOrdersRouter(db));
 
     // ---------- LESSON ROUTES ----------

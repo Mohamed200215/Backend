@@ -6,16 +6,17 @@ module.exports = (db) => {
   const ordersCollection = db.collection("orders");
 
   //  POST - create a new order
-  router.post("/", async (req, res) => {
-    try {
-      const order = req.body;
-      const result = await ordersCollection.insertOne(order);
-      res.status(201).json({ message: "Order placed successfully!", result });
-    } catch (err) {
-      console.error(err);
-      res.status(500).json({ error: "Failed to place order" });
-    }
-  });
+router.post("/", async (req, res) => {
+  try {
+    console.log("📦 Incoming order:", req.body); // add this
+    const order = req.body;
+    const result = await ordersCollection.insertOne(order);
+    res.status(201).json({ message: "Order placed successfully!", result });
+  } catch (err) {
+    console.error("❌ Error inserting order:", err); // add this
+    res.status(500).json({ error: "Failed to place order" });
+  }
+});
 
   //  GET - get all orders
   router.get("/", async (req, res) => {
