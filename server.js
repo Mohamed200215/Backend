@@ -38,6 +38,23 @@ app.use("/images", express.static("public/images"));
     const db = client.db("Afterschool");
     const lessonsCollection = db.collection("Lessons");
 
+
+app.get("/search", async (req, res) => {
+  const q = req.query.q?.toLowerCase() || "";
+
+  const results = await lessonsCollection.find({
+    $or: [
+      { subject: { $regex: q, $options: "i" } },
+      { location: { $regex: q, $options: "i" } },
+      { price: { $regex: q, $options: "i" } },
+      { spaces: { $regex: q, $options: "i" } }
+    ]
+  }).toArray();
+
+  res.json(results);
+});
+
+
     //the orders router
     app.use("/orders", createOrdersRouter(db));
 
