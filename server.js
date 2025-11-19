@@ -32,6 +32,7 @@ async function main() {
   res.json({ status: "Backend running", time: new Date() });
 });
 
+app.use("/images", express.static("public/images"));
 
 
     const db = client.db("Afterschool");
