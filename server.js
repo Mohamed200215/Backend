@@ -22,7 +22,7 @@ async function main() {
     console.log("✅ Connected to MongoDB Atlas");
 
     const db = client.db("Afterschool");
-    const lessonsCollection = db.collection("lessons");
+    const lessonsCollection = db.collection("Lessons");
 
     //the orders router
     app.use("/orders", createOrdersRouter(db));
