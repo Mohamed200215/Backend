@@ -39,9 +39,7 @@ async function main() {
     // Public images
     app.use("/images", express.static("public/images"));
 
-    // ===============================
-    // 🔍 BACKEND SEARCH ROUTE (fixed)
-    // ===============================
+
     app.get("/search", async (req, res) => {
       const q = req.query.q?.toLowerCase() || "";
 
@@ -104,9 +102,11 @@ async function main() {
       }
     });
 
-    app.listen(3000, () =>
-      console.log("✅ Server running on http://localhost:3000")
-    );
+const port = process.env.PORT || 3000;
+app.listen(port, () => {
+  console.log("Server started on port " + port);
+});
+
   } catch (err) {
     console.error("❌ Error:", err);
   }
