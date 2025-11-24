@@ -11,12 +11,15 @@ module.exports = (db) => {
   router.post("/", async (req, res) => {
     try {
       const order = req.body;
+
+      // Insert order into DB
       const result = await ordersCollection.insertOne(order);
 
-      res.status(201).json({
-        message: "Order placed successfully!",
-        result,
-      });
+      // Attach insertedId so frontend receives the full order object
+      order._id = result.insertedId;
+
+      // Send back the FULL order (this is needed for confirmation popup)
+      res.status(201).json(order);
     } catch (err) {
       console.error(err);
       res.status(500).json({ error: "Failed to place order" });

@@ -5,7 +5,11 @@ const { MongoClient, ObjectId } = require("mongodb");
 const createOrdersRouter = require("./routes/orders");
 
 const app = express();
-app.use(cors());
+app.use(cors({
+  origin: "*",
+  methods: ["GET", "POST", "PUT", "DELETE"],
+}));
+
 app.use(express.json());
 
 // Logging middleware
@@ -102,7 +106,8 @@ async function main() {
       }
     });
 
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 8080;
+
 app.listen(port, () => {
   console.log("Server started on port " + port);
 });
