@@ -36,21 +36,35 @@ module.exports = (db) => {
         return res.status(400).json({ error: "Order must include at least one item" });
       }
 
-      // Validate each item
-      for (const item of order.items) {
-        if (!item.lessonId || !item.subject || !item.price) {
-          return res.status(400).json({ error: "Invalid item structure" });
-        }
+// Validate each item
+for (const item of order.items) {
 
-        // Verify lesson exists in DB
-        const lessonExists = await db
-          .collection("Lessons")
-          .findOne({ _id: new ObjectId(item.lessonId) });
+    if (!item.lessonId || !item.subject || !item.price) {
+        return res.status(400).json({ error: "Invalid item structure" });
+    }
 
-        if (!lessonExists) {
-          return res.status(400).json({ error: `Lesson does not exist: ${item.subject}` });
-        }
-      }
+    // Fetch real lesson from DB
+    const lesson = await db.collection("Lessons")
+        .findOne({ _id: new ObjectId(item.lessonId) });
+
+    if (!lesson) {
+        return res.status(400).json({ error: "Lesson does not exist" });
+    }
+
+    // Validate subject matches DB
+    if (item.subject !== lesson.subject) {
+        return res.status(400).json({
+            error: `Subject mismatch. Expected: ${lesson.subject}`
+        });
+    }
+
+    // Validate price matches DB
+    if (item.price !== lesson.price) {
+        return res.status(400).json({
+            error: `Price mismatch. Expected: ${lesson.price}`
+        });
+    }
+}
 
       // Insert order into MongoDB
       const result = await ordersCollection.insertOne(order);
